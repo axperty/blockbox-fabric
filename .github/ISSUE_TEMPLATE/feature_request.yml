@@ -1,0 +1,43 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill out the form below to help us understand your idea.
+  - type: textarea
+    id: related_problem
+    attributes:
+      label: Is your feature request related to a problem? Please describe.
+      description: A clear and direct description of what the problem is.
+      placeholder: |
+        Example:
+        I am frustrated when I try to detail a build and the specific block variant is missing from the mod.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you want
+      description: A clear and direct description of what you want to happen.
+      placeholder: |
+        Example:
+        I would like a new decorative block variant to match the new wood types.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Describe alternatives you considered
+      description: Have you thought of other ways to solve the problem?
+      placeholder: |
+        Example:
+        I tried using standard wood blocks but they lack the proper texture details.
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context about the feature request here.
+      placeholder: |
+        Example:
+        This would improve consistency for builders creating large structures.

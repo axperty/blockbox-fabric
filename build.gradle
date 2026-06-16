@@ -1,0 +1,77 @@
+plugins {
+	id 'fabric-loom' version "${loom_version}"
+	id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.mod_group_id
+
+repositories {
+	maven { url "https://cursemaven.com" }
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/blockbox.accesswidener")
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings loom.officialMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+}
+
+def expandProps = [
+		"mod_version": project.mod_version,
+		"mod_id": project.mod_id,
+		"mod_name": project.mod_name,
+		"mod_description": project.mod_description,
+		"mod_authors": project.mod_authors,
+		"mod_license": project.mod_license
+]
+
+processResources {
+	inputs.properties(expandProps)
+
+	filesMatching("fabric.mod.json") {
+		expand(expandProps)
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+}
+
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+	def projectName = project.name
+	inputs.property "projectName", projectName
+
+	from("LICENSE") {
+		rename { "${it}_$projectName"}
+	}
+}
+
+// configure the maven publication
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			from components.java
+		}
+	}
+
+	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+	repositories {
+		// Add repositories to publish to here.
+		// Notice: This block does NOT have the same function as the block in the top level.
+		// The repositories here will be used for publishing your artifact, not for
+		// retrieving dependencies.
+	}
+}

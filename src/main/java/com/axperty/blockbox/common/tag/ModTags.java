@@ -1,0 +1,65 @@
+package com.axperty.blockbox.common.tag;
+
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import com.axperty.blockbox.BlockBox;
+
+public class ModTags
+{
+	// Blocks that are palisades.
+	public static final TagKey<Block> PALISADES = modBlockTag("palisades");
+
+	// Blocks that are spiked palisades.
+	public static final TagKey<Block> SPIKED_PALISADES = modBlockTag("spiked_palisades");
+
+	// Blocks that are wooden seats.
+	public static final TagKey<Block> WOODEN_SEATS = modBlockTag("wooden_seats");
+
+	// Blocks that are made out of Amethyst.
+	public static final TagKey<Block> AMETHYST_BLOCKS = modBlockTag("amethyst_blocks");
+
+	// Blocks that are made out of Iron Plate.
+	public static final TagKey<Block> IRON_PLATE_BLOCKS = modBlockTag("iron_plate_blocks");
+
+	// Blocks that are variants of Copper Bars..
+	public static final TagKey<Block> COPPER_BARS = modBlockTag("copper_bars");
+
+	// Blocks that are braziers.
+	public static final TagKey<Block> BRAZIERS = modBlockTag("braziers");
+
+	// Blocks that are made out of Gold.
+	public static final TagKey<Block> GOLDEN_BLOCKS = modBlockTag("golden_blocks");
+
+	// Item forms of sky lanterns.
+	public static final TagKey<Block> SKY_LANTERNS = modBlockTag("sky_lanterns");
+
+	///////
+
+	// Item forms of palisades.
+	public static final TagKey<Item> PALISADE_ITEMS = modItemTag("palisades");
+
+	// Item forms of spiked palisades.
+	public static final TagKey<Item> SPIKED_PALISADE_ITEMS = modItemTag("spiked_palisades");
+
+	// Blocks that are variants of Copper Bars..
+	public static final TagKey<Item> COPPER_BAR_ITEMS = modItemTag("copper_bars");
+
+	// Item forms of seats.
+	public static final TagKey<Item> WOODEN_SEAT_ITEMS = modItemTag("wooden_seats");
+
+	// Item forms of blocks made out of Gold.
+	public static final TagKey<Item> GOLDEN_BLOCK_ITEMS = modItemTag("golden_blocks");
+
+	// Item forms of sky lanterns.
+	public static final TagKey<Item> SKY_LANTERN_ITEMS = modItemTag("sky_lanterns");
+
+	private static TagKey<Block> modBlockTag(String path) {
+		return net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, path));
+	}
+
+	private static TagKey<Item> modItemTag(String path) {
+		return net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, path));
+	}
+}

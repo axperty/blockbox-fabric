@@ -1,0 +1,14 @@
+![The Block Box Fabric](https://i.imgur.com/4mEzBvT.png)
+
+***
+
+### ✨ What's New:
+
+- This is the initial release of the Fabric loader port for The Block Box mod by vectorwing.
+
+***
+
+### 📝 Feedback and Support:
+
+- Found a bug or have suggestions? [Submit an issue on GitHub](https://github.com/com.axperty/blockbox/issues/new?template=bug_report.yml).
+- Support this mod by [creating your own server](https://url-shortener.curseforge.com/VZwFX) or [donating via PayPal](https://paypal.me/kevgelhorn).
