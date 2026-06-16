@@ -5,10 +5,12 @@ import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class BlockBoxConfig {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), "blockbox.json");
+	private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), "blockbox-config.json");
 
 	public static boolean ADD_ITEMS_TO_VANILLA_TABS = true;
 
@@ -22,6 +24,17 @@ public class BlockBoxConfig {
 			} catch (Exception e) {
 				BlockBox.LOGGER.error("Failed to load config", e);
 			}
+		}
+		save();
+	}
+
+	public static void save() {
+		try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
+			ConfigData data = new ConfigData();
+			data.addItemsToVanillaTabs = ADD_ITEMS_TO_VANILLA_TABS;
+			GSON.toJson(data, writer);
+		} catch (IOException e) {
+			BlockBox.LOGGER.error("Failed to save config", e);
 		}
 	}
 
