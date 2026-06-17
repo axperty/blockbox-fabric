@@ -2,7 +2,9 @@ package com.axperty.blockbox.common.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import com.axperty.blockbox.BlockBox;
@@ -16,7 +18,7 @@ public class ModEntityTypes
 
 	private static <T extends EntityType<?>> Supplier<T> register(String name, Supplier<T> entityTypeSupplier) {
 		T entityType = entityTypeSupplier.get();
-		Registry.register(BuiltInRegistries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, name), entityType);
+		Registry.register(BuiltInRegistries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(BlockBox.MOD_ID, name), entityType);
 		return () -> entityType;
 	}
 
@@ -25,5 +27,5 @@ public class ModEntityTypes
 					.sized(0.25f, 0.35f)
 					.clientTrackingRange(3)
 					.updateInterval(Integer.MAX_VALUE)
-					.build("seat"));
+					.build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(BlockBox.MOD_ID, "seat"))));
 }

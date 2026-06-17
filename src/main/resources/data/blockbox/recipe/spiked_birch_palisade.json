@@ -3,9 +3,7 @@
   "category": "misc",
   "group": "bb_spiked_palisades",
   "ingredients": [
-    {
-      "item": "blockbox:birch_palisade"
-    }
+    "blockbox:birch_palisade"
   ],
   "result": {
     "count": 1,

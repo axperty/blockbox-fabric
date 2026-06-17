@@ -2,7 +2,6 @@ package com.axperty.blockbox.common.event;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
-
 import java.util.LinkedHashMap;
 import java.util.function.Supplier;
 

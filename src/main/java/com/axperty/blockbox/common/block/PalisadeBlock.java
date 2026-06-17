@@ -2,44 +2,45 @@ package com.axperty.blockbox.common.block;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.Util;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import com.axperty.blockbox.common.block.state.PalisadeConnection;
 import com.axperty.blockbox.common.registry.ModSounds;
 import com.axperty.blockbox.common.tag.ModTags;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.function.Supplier;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-public class PalisadeBlock extends CrossCollisionBlock implements SimpleWaterloggedBlock
+public class PalisadeBlock extends Block implements SimpleWaterloggedBlock
 {
 	public static final MapCodec<PalisadeBlock> CODEC = simpleCodec(PalisadeBlock::new);
 
@@ -47,31 +48,32 @@ public class PalisadeBlock extends CrossCollisionBlock implements SimpleWaterlog
 	public static final EnumProperty<PalisadeConnection> TYPE_EAST = EnumProperty.create("east", PalisadeConnection.class);
 	public static final EnumProperty<PalisadeConnection> TYPE_SOUTH = EnumProperty.create("south", PalisadeConnection.class);
 	public static final EnumProperty<PalisadeConnection> TYPE_WEST = EnumProperty.create("west", PalisadeConnection.class);
+	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	public final Supplier<Block> strippedForm;
 	public final Supplier<Block> spikedForm;
 
-	public static final Map<Direction, EnumProperty<PalisadeConnection>> PROPERTY_BY_DIRECTION = Util.make(Maps.newHashMap(), (map) -> {
-		map.put(Direction.NORTH, TYPE_NORTH);
-		map.put(Direction.EAST, TYPE_EAST);
-		map.put(Direction.SOUTH, TYPE_SOUTH);
-		map.put(Direction.WEST, TYPE_WEST);
-	});
+	public static final Map<Direction, EnumProperty<PalisadeConnection>> PROPERTY_BY_DIRECTION = Map.of(
+		Direction.NORTH, TYPE_NORTH,
+		Direction.EAST, TYPE_EAST,
+		Direction.SOUTH, TYPE_SOUTH,
+		Direction.WEST, TYPE_WEST
+	);
 
 	public PalisadeBlock(Properties properties) {
 		this(null, null, 4.0F, 4.0F, 16.0F, 16.0F, 16.0F, properties);
 	}
 
-	public PalisadeBlock(@Nullable Supplier<Block> spikedForm, Properties properties) {
+	public PalisadeBlock(Supplier<Block> spikedForm, Properties properties) {
 		this(spikedForm, null, 4.0F, 4.0F, 16.0F, 16.0F, 16.0F, properties);
 	}
 
-	public PalisadeBlock(@Nullable Supplier<Block> spikedForm, @Nullable Supplier<Block> strippedForm, Properties properties) {
+	public PalisadeBlock(Supplier<Block> spikedForm, Supplier<Block> strippedForm, Properties properties) {
 		this(spikedForm, strippedForm, 4.0F, 4.0F, 16.0F, 16.0F, 16.0F, properties);
 	}
 
-	public PalisadeBlock(@Nullable Supplier<Block> spikedForm, @Nullable Supplier<Block> strippedForm, float nodeWidth, float extensionWidth, float nodeHeight, float extensionHeight, float collisionHeight, Properties properties) {
-		super(nodeWidth, extensionWidth, nodeHeight, extensionHeight, collisionHeight, properties);
+	public PalisadeBlock(Supplier<Block> spikedForm, Supplier<Block> strippedForm, float nodeWidth, float extensionWidth, float nodeHeight, float extensionHeight, float collisionHeight, Properties properties) {
+		super(properties);
 		this.spikedForm = spikedForm;
 		this.strippedForm = strippedForm;
 		this.registerDefaultState(this.stateDefinition.any()
@@ -80,15 +82,49 @@ public class PalisadeBlock extends CrossCollisionBlock implements SimpleWaterlog
 				.setValue(TYPE_SOUTH, PalisadeConnection.NONE)
 				.setValue(TYPE_WEST, PalisadeConnection.NONE)
 				.setValue(WATERLOGGED, false));
+		
+		float minNode = 8.0F - nodeWidth;
+		float maxNode = 8.0F + nodeWidth;
+		float minExt = 8.0F - extensionWidth;
+		float maxExt = 8.0F + extensionWidth;
+		VoxelShape nodeShape = Block.box(minNode, 0.0F, minNode, maxNode, nodeHeight, maxNode);
+		VoxelShape northExt = Block.box(minExt, 0.0F, 0.0F, maxExt, extensionHeight, maxExt);
+		VoxelShape southExt = Block.box(minExt, 0.0F, minExt, maxExt, extensionHeight, 16.0F);
+		VoxelShape westExt = Block.box(0.0F, 0.0F, minExt, maxExt, extensionHeight, maxExt);
+		VoxelShape eastExt = Block.box(minExt, 0.0F, minExt, 16.0F, extensionHeight, maxExt);
+
+		Map<BlockState, VoxelShape> map = Maps.newHashMap();
+		for (BlockState state : this.stateDefinition.getPossibleStates()) {
+			VoxelShape shape = nodeShape;
+			if (state.getValue(TYPE_NORTH) != PalisadeConnection.NONE) shape = Shapes.or(shape, northExt);
+			if (state.getValue(TYPE_SOUTH) != PalisadeConnection.NONE) shape = Shapes.or(shape, southExt);
+			if (state.getValue(TYPE_WEST) != PalisadeConnection.NONE) shape = Shapes.or(shape, westExt);
+			if (state.getValue(TYPE_EAST) != PalisadeConnection.NONE) shape = Shapes.or(shape, eastExt);
+			map.put(state, shape);
+		}
+		this.shapesCache = map;
+	}
+
+	private final Map<BlockState, VoxelShape> shapesCache;
+
+	@Override
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return this.shapesCache.get(state);
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+	protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return this.shapesCache.get(state);
+	}
+
+
+	@Override
+	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
 		if (stack.getItem() instanceof AxeItem && strippedForm != null) {
 			level.playSound(player, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 			level.addDestroyBlockEffect(pos, state);
 			if (player != null) {
-				stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+				stack.hurtAndBreak(1, player, hand);
 			}
 			level.setBlock(pos, strippedForm.get().defaultBlockState()
 					.setValue(TYPE_NORTH, state.getValue(TYPE_NORTH))
@@ -96,22 +132,22 @@ public class PalisadeBlock extends CrossCollisionBlock implements SimpleWaterlog
 					.setValue(TYPE_SOUTH, state.getValue(TYPE_SOUTH))
 					.setValue(TYPE_WEST, state.getValue(TYPE_WEST))
 					.setValue(WATERLOGGED, state.getValue(WATERLOGGED)), 11);
-			return ItemInteractionResult.sidedSuccess(level.isClientSide);
+			return InteractionResult.SUCCESS;
 		}
 		if (spikedForm == null) {
-			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+			return InteractionResult.PASS;
 		}
-		if (stack.getItem() instanceof SwordItem && level.getBlockState(pos.above()).isAir()) {
+		if (stack.is(ItemTags.SWORDS) && level.getBlockState(pos.above()).isAir()) {
 			level.playSound(null, pos, ModSounds.ITEM_SWORD_CARVE.get(), SoundSource.BLOCKS, 1.0F, 0.9F);
 			level.addDestroyBlockEffect(pos, state);
-			stack.hurtAndBreak(2, player, LivingEntity.getSlotForHand(hand));
+			stack.hurtAndBreak(2, player, hand);
 			level.setBlock(pos, spikedForm.get().defaultBlockState()
 					.setValue(SpikedPalisadeBlock.NORTH, !state.getValue(TYPE_NORTH).equals(PalisadeConnection.NONE))
 					.setValue(SpikedPalisadeBlock.EAST, !state.getValue(TYPE_EAST).equals(PalisadeConnection.NONE))
 					.setValue(SpikedPalisadeBlock.SOUTH, !state.getValue(TYPE_SOUTH).equals(PalisadeConnection.NONE))
 					.setValue(SpikedPalisadeBlock.WEST, !state.getValue(TYPE_WEST).equals(PalisadeConnection.NONE))
 					.setValue(WATERLOGGED, state.getValue(WATERLOGGED)), 11);
-			return ItemInteractionResult.sidedSuccess(level.isClientSide);
+			return InteractionResult.SUCCESS;
 		}
 		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
 	}
@@ -140,43 +176,21 @@ public class PalisadeBlock extends CrossCollisionBlock implements SimpleWaterlog
 	}
 
 	@Override
-	protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+	protected BlockState updateShape(BlockState state, LevelReader levelReader, ScheduledTickAccess tickAccess, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
 		if (state.getValue(WATERLOGGED)) {
-			level.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+			tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
 		}
 
-		return facing.getAxis().getPlane() == Direction.Plane.HORIZONTAL
-				? state.setValue(PROPERTY_BY_DIRECTION.get(facing), this.getConnectionType(facingState, facingState.isFaceSturdy(level, facingPos, facing.getOpposite()), facing.getOpposite()))
-				: super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+		return direction.getAxis().getPlane() == Direction.Plane.HORIZONTAL
+				? state.setValue(PROPERTY_BY_DIRECTION.get(direction), this.getConnectionType(neighborState, neighborState.isFaceSturdy(levelReader, neighborPos, direction.getOpposite()), direction.getOpposite()))
+				: super.updateShape(state, levelReader, tickAccess, pos, direction, neighborPos, neighborState, random);
 	}
 
-	protected static int indexFor(Direction facing) {
-		return 1 << facing.get2DDataValue();
+	public static boolean isExceptionForConnection(BlockState state) {
+		return state.is(BlockTags.FENCES) || state.getBlock() instanceof PalisadeBlock || state.getBlock() instanceof SpikedPalisadeBlock;
 	}
 
-	@Override
-	protected int getAABBIndex(BlockState state) {
-		return this.stateToIndex.computeIntIfAbsent(state, (currentState) -> {
-			int i = 0;
-			if (!currentState.getValue(TYPE_NORTH).equals(PalisadeConnection.NONE)) {
-				i |= indexFor(Direction.NORTH);
-			}
-
-			if (!currentState.getValue(TYPE_EAST).equals(PalisadeConnection.NONE)) {
-				i |= indexFor(Direction.EAST);
-			}
-
-			if (!currentState.getValue(TYPE_SOUTH).equals(PalisadeConnection.NONE)) {
-				i |= indexFor(Direction.SOUTH);
-			}
-
-			if (!currentState.getValue(TYPE_WEST).equals(PalisadeConnection.NONE)) {
-				i |= indexFor(Direction.WEST);
-			}
-
-			return i;
-		});
-	}
+	// removed getAABBIndex
 
 	public PalisadeConnection getConnectionType(BlockState state, boolean isSideSolid, Direction direction) {
 		PalisadeConnection type = PalisadeConnection.NONE;
@@ -191,7 +205,7 @@ public class PalisadeBlock extends CrossCollisionBlock implements SimpleWaterlog
 	}
 
 	@Override
-	protected @NotNull MapCodec<? extends CrossCollisionBlock> codec() {
+	protected @NotNull MapCodec<PalisadeBlock> codec() {
 		return CODEC;
 	}
 

@@ -2,6 +2,7 @@ package com.axperty.blockbox.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -18,9 +19,9 @@ public class SkyLanternBlock extends Block
 	}
 
 	@Override
-	protected void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
+	public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
 		BlockPos blockpos = hit.getBlockPos();
-		if (!level.isClientSide && projectile.mayInteract(level, blockpos) && projectile.mayBreak(level)) {
+		if (!level.isClientSide() && projectile.mayInteract((ServerLevel) level, blockpos) && projectile.mayBreak((ServerLevel) level)) {
 			level.destroyBlock(blockpos, true, projectile);
 		}
 	}

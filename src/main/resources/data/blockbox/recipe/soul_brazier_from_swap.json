@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "blockbox:brazier"
-    },
-    {
-      "tag": "minecraft:soul_fire_base_blocks"
-    }
+    "blockbox:brazier",
+    "#minecraft:soul_fire_base_blocks"
   ],
   "result": {
     "count": 1,

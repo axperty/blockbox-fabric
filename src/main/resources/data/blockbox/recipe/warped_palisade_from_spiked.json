@@ -3,9 +3,7 @@
   "category": "misc",
   "group": "bb_palisades",
   "ingredients": [
-    {
-      "item": "blockbox:spiked_warped_palisade"
-    }
+    "blockbox:spiked_warped_palisade"
   ],
   "result": {
     "count": 1,

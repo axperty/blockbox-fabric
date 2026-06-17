@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "bb_chairs",
   "key": {
-    "#": {
-      "item": "minecraft:oak_planks"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "minecraft:oak_planks",
+    "/": "minecraft:stick"
   },
   "pattern": [
     "###",

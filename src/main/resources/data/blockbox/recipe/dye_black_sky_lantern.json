@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:dyes/black"
-    },
-    {
-      "tag": "blockbox:sky_lanterns"
-    }
+    "#c:dyes/black",
+    "#blockbox:sky_lanterns"
   ],
   "result": {
     "count": 1,

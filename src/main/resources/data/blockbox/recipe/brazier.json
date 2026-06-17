@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "N": {
-      "item": "minecraft:netherrack"
-    },
-    "c": {
-      "item": "minecraft:chain"
-    },
-    "i": {
-      "tag": "c:ingots/iron"
-    }
+    "N": "minecraft:netherrack",
+    "c": "#c:chains",
+    "i": "#c:ingots/iron"
   },
   "pattern": [
     "c c",

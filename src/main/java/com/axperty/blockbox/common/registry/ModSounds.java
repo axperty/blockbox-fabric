@@ -2,7 +2,7 @@ package com.axperty.blockbox.common.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import com.axperty.blockbox.BlockBox;
 
@@ -14,11 +14,11 @@ public class ModSounds
 
 	private static Supplier<SoundEvent> register(String name, Supplier<SoundEvent> soundEventSupplier) {
 		SoundEvent soundEvent = soundEventSupplier.get();
-		Registry.register(BuiltInRegistries.SOUND_EVENT, ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, name), soundEvent);
+		Registry.register(BuiltInRegistries.SOUND_EVENT, Identifier.fromNamespaceAndPath(BlockBox.MOD_ID, name), soundEvent);
 		return () -> soundEvent;
 	}
 
 	// Stove
 	public static final Supplier<SoundEvent> ITEM_SWORD_CARVE = register("item.sword.carve",
-			() -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, "item.sword.carve")));
+			() -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(BlockBox.MOD_ID, "item.sword.carve")));
 }

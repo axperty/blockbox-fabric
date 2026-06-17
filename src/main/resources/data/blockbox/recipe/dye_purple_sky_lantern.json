@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:dyes/purple"
-    },
-    {
-      "tag": "blockbox:sky_lanterns"
-    }
+    "#c:dyes/purple",
+    "#blockbox:sky_lanterns"
   ],
   "result": {
     "count": 1,

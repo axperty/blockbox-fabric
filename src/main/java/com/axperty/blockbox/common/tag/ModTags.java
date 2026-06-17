@@ -1,6 +1,7 @@
 package com.axperty.blockbox.common.tag;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -35,8 +36,6 @@ public class ModTags
 	// Item forms of sky lanterns.
 	public static final TagKey<Block> SKY_LANTERNS = modBlockTag("sky_lanterns");
 
-	///////
-
 	// Item forms of palisades.
 	public static final TagKey<Item> PALISADE_ITEMS = modItemTag("palisades");
 
@@ -56,10 +55,10 @@ public class ModTags
 	public static final TagKey<Item> SKY_LANTERN_ITEMS = modItemTag("sky_lanterns");
 
 	private static TagKey<Block> modBlockTag(String path) {
-		return net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, path));
+		return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(BlockBox.MOD_ID, path));
 	}
 
 	private static TagKey<Item> modItemTag(String path) {
-		return net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, path));
+		return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(BlockBox.MOD_ID, path));
 	}
 }

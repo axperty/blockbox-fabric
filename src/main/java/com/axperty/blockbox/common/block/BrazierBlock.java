@@ -1,6 +1,5 @@
 package com.axperty.blockbox.common.block;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -8,8 +7,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FireChargeItem;
@@ -17,15 +17,11 @@ import net.minecraft.world.item.FlintAndSteelItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -41,11 +37,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import com.axperty.blockbox.common.tag.ModTags;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 {
 	public static final BooleanProperty HANGING = BlockStateProperties.HANGING;
@@ -72,16 +64,16 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
 		if (stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof FireChargeItem) {
 			if (canLight(state)) {
 				level.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
 				level.setBlock(pos, state.setValue(BlockStateProperties.LIT, true), 11);
 				level.gameEvent(player, GameEvent.BLOCK_PLACE, pos);
 				if (player != null) {
-					stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+					stack.hurtAndBreak(1, player, hand);
 				}
-				return ItemInteractionResult.sidedSuccess(level.isClientSide);
+				return InteractionResult.SUCCESS;
 			}
 		}
 		if (stack.getItem() instanceof ShovelItem) {
@@ -89,21 +81,21 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 				level.playSound(null, pos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 1.0F, 1.0F);
 				level.setBlock(pos, state.setValue(BlockStateProperties.LIT, false), 11);
 				if (player != null) {
-					stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+					stack.hurtAndBreak(1, player, hand);
 				}
-				return ItemInteractionResult.sidedSuccess(level.isClientSide);
+				return InteractionResult.SUCCESS;
 			}
 		}
 		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
 	}
 
 	@Override
-	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier applier, boolean flag) {
 		if (state.getValue(LIT) && entity instanceof LivingEntity && isEntityTouchingFlame(entity, pos, state)) {
 			entity.hurt(level.damageSources().campfire(), (float)this.fireDamage);
 		}
 
-		super.entityInside(state, level, pos, entity);
+		super.entityInside(state, level, pos, entity, applier, flag);
 	}
 
 	protected boolean isEntityTouchingFlame(Entity entity, BlockPos pos, BlockState state) {
@@ -113,7 +105,6 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 		return Shapes.joinIsNotEmpty(collisionShape, Shapes.create(entity.getBoundingBox()), BooleanOp.AND);
 	}
 
-	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
@@ -131,14 +122,14 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 	}
 
 	@Override
-	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+	protected BlockState updateShape(BlockState state, LevelReader levelReader, ScheduledTickAccess tickAccess, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
 		if (state.getValue(WATERLOGGED)) {
-			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+			tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
 		}
 
-		return getConnectedDirection(state).getOpposite() == direction && !state.canSurvive(level, pos)
+		return getConnectedDirection(state).getOpposite() == direction && !state.canSurvive(levelReader, pos)
 				? Blocks.AIR.defaultBlockState()
-				: super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+				: super.updateShape(state, levelReader, tickAccess, pos, direction, neighborPos, neighborState, random);
 	}
 
 	@Override
@@ -191,7 +182,7 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 		}
 	}
 
-	public static void douse(@Nullable Entity entity, LevelAccessor level, BlockPos pos, BlockState state) {
+	public static void douse(Entity entity, LevelAccessor level, BlockPos pos, BlockState state) {
 		if (level.isClientSide()) {
 			for (int i = 0; i < 20; i++) {
 				makeParticles((Level) level, pos);
@@ -199,9 +190,6 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 		}
 
 		BlockEntity blockentity = level.getBlockEntity(pos);
-		if (blockentity instanceof CampfireBlockEntity) {
-			((CampfireBlockEntity) blockentity).dowse();
-		}
 
 		level.gameEvent(entity, GameEvent.BLOCK_CHANGE, pos);
 	}

@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:dyes/lime"
-    },
-    {
-      "tag": "blockbox:sky_lanterns"
-    }
+    "#c:dyes/lime",
+    "#blockbox:sky_lanterns"
   ],
   "result": {
     "count": 1,

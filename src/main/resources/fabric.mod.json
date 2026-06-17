@@ -21,11 +21,10 @@
       "com.axperty.blockbox.client.event.ClientSetupEvents"
     ]
   },
-  "accessWidener": "blockbox.accesswidener",
   "depends": {
     "fabricloader": ">=0.19.2",
-    "minecraft": ">=1.21.1",
-    "java": ">=21",
+    "minecraft": "~26.1",
+    "java": ">=25",
     "fabric-api": "*"
   }
 }

@@ -1,6 +1,7 @@
 package com.axperty.blockbox.common.tag;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -18,10 +19,10 @@ public class CompatibilityTags
 	public static final TagKey<Block> SABLE_SLIPPERY = externalBlockTag(SABLE, "slippery");
 
 	private static TagKey<Block> externalBlockTag(String modId, String path) {
-		return net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(modId, path));
+		return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(modId, path));
 	}
 
 	private static TagKey<Item> externalItemTag(String modId, String path) {
-		return net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, ResourceLocation.fromNamespaceAndPath(modId, path));
+		return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(modId, path));
 	}
 }

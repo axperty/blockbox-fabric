@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 
 public class ModBlockSets
 {
-	public static final Supplier<BlockSetType> IRON_PLATE = Suppliers.memoize(() -> BlockSetType.register(
+	public static final Supplier<BlockSetType> IRON_PLATE = Suppliers.memoize(() -> 
 			new BlockSetType(
 					"iron_plate",
 					true,
@@ -26,9 +26,9 @@ public class ModBlockSets
 					SoundEvents.STONE_BUTTON_CLICK_OFF,
 					SoundEvents.STONE_BUTTON_CLICK_ON
 			)
-	));
+	);
 
-	public static final Supplier<BlockSetType> GOLD = Suppliers.memoize(() -> BlockSetType.register(
+	public static final Supplier<BlockSetType> GOLD = Suppliers.memoize(() -> 
 			new BlockSetType(
 					"iron_plate",
 					true,
@@ -45,5 +45,5 @@ public class ModBlockSets
 					SoundEvents.STONE_BUTTON_CLICK_OFF,
 					SoundEvents.STONE_BUTTON_CLICK_ON
 			)
-	));
+	);
 }

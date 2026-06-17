@@ -1,6 +1,5 @@
 package com.axperty.blockbox.common.event;
 
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -10,6 +9,7 @@ import com.axperty.blockbox.common.registry.ModItems;
 public class CommonEvents
 {
 	public static void registerTabModifications() {
+		/*
 		if (!BlockBoxConfig.ADD_ITEMS_TO_VANILLA_TABS) {
 			return;
 		}
@@ -53,5 +53,6 @@ public class CommonEvents
 			entries.addAfter(Items.PINK_CANDLE, new ItemStack(ModItems.LIGHT_GRAY_SKY_LANTERN.get()));
 			entries.addAfter(Items.PINK_CANDLE, new ItemStack(ModItems.WHITE_SKY_LANTERN.get()));
 		});
+		*/
 	}
 }

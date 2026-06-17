@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "blockbox:exposed_copper_bars"
-    },
-    {
-      "item": "minecraft:honeycomb"
-    }
+    "blockbox:exposed_copper_bars",
+    "minecraft:honeycomb"
   ],
   "result": {
     "count": 1,
