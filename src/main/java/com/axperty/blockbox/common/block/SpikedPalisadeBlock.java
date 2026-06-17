@@ -10,6 +10,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
@@ -59,8 +60,6 @@ public class SpikedPalisadeBlock extends CrossCollisionBlock implements SimpleWa
 				.setValue(WATERLOGGED, false));
 	}
 
-
-
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
 		if (stack.getItem() instanceof AxeItem && strippedForm != null) {
@@ -91,6 +90,15 @@ public class SpikedPalisadeBlock extends CrossCollisionBlock implements SimpleWa
 				}
 			}
 		}
+	}
+
+	@Override
+	public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
+		entity.makeStuckInBlock(state, new Vec3(0.8, 0.75, 0.8));
+		if (!level.isClientSide() && entity instanceof LivingEntity) {
+			entity.hurt(ModDamageTypes.getSimpleDamageSource(level, ModDamageTypes.PALISADE), 1.0F);
+		}
+		super.stepOn(level, pos, state, entity);
 	}
 
 	protected boolean isEntityTouchingSpike(Entity entity, BlockPos pos) {
