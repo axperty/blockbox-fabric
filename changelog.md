@@ -1,4 +1,4 @@
-![The Block Box Fabric](https://i.imgur.com/4mEzBvT.png)
+![The Block Box Refabricated](https://i.imgur.com/srB6L7Q.png)
 
 ***
 
