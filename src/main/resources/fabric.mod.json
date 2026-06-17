@@ -8,7 +8,7 @@
     "${mod_authors}"
   ],
   "contact": {
-    "sources": "https://github.com/axperty/BlockBox"
+    "sources": "https://github.com/axperty/blockbox-refabricated"
   },
   "license": "${mod_license}",
   "icon": "assets/${mod_id}/logo.png",
