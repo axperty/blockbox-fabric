@@ -10,11 +10,11 @@
 
 ### Overview
 
-The Block Box (Fabric) aims to extend the block palette of Minecraft, adding blocks for themes and use cases that aren't well-covered by existing blocks. Also, the mod does not generate anything in your world - you can just drop it in at any time!
+The Block Box Refabricated aims to extend the block palette of Minecraft, adding blocks for themes and use cases that aren't well-covered by existing blocks. Also, the mod does not generate anything in your world - you can just drop it in at any time!
 
 ### Contributing
 
-Your contributions to this project allow The Block Box (Fabric) to be improved to deliver a better gameplay experience for all players. Feel free to submit your code suggestions, bug reports, texture improvements, or translations.
+Your contributions to this project allow The Block Box Refabricated to be improved to deliver a better gameplay experience for all players. Feel free to submit your code suggestions, bug reports, texture improvements, or translations.
 
 ### Fabric Loader Port
 
