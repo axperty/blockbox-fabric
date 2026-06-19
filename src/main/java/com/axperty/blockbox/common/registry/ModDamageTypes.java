@@ -10,7 +10,7 @@ import com.axperty.blockbox.BlockBox;
 
 public class ModDamageTypes
 {
-	public static final ResourceKey<DamageType> PALISADE = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, "palisade"));
+	public static final ResourceKey<DamageType> PALISADE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(BlockBox.MOD_ID, "palisade"));
 
 	public static DamageSource getSimpleDamageSource(Level level, ResourceKey<DamageType> type) {
 		return new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(type));

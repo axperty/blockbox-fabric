@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "blockbox:iron_tread_plate"
+  },
+  "result": "blockbox:iron_tread_plate_stairs",
+  "count": 1
+}

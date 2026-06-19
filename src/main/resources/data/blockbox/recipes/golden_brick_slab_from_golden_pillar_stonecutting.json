@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "blockbox:golden_pillar"
+  },
+  "result": "blockbox:golden_brick_slab",
+  "count": 2
+}

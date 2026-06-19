@@ -4,7 +4,7 @@
 
 ### ✨ What's New:
 
-- This is the initial release of the Fabric loader port for The Block Box mod by vectorwing.
+- Added support for Minecraft 1.20.
 
 ***
 

@@ -23,9 +23,9 @@
   },
   "accessWidener": "blockbox.accesswidener",
   "depends": {
-    "fabricloader": ">=0.19.2",
-    "minecraft": ">=1.21.1",
-    "java": ">=21",
-    "fabric-api": "*"
+    "fabricloader": ">=0.14.20",
+    "fabric": "*",
+    "minecraft": ">=1.20",
+    "java": ">=17"
   }
 }

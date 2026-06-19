@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "bb_palisades",
+  "key": {
+    "#": {
+      "item": "minecraft:stripped_crimson_stem"
+    }
+  },
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 12,
+    "item": "blockbox:stripped_crimson_palisade"
+  }
+}

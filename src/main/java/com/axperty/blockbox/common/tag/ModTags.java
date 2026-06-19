@@ -1,5 +1,6 @@
 package com.axperty.blockbox.common.tag;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -56,10 +57,10 @@ public class ModTags
 	public static final TagKey<Item> SKY_LANTERN_ITEMS = modItemTag("sky_lanterns");
 
 	private static TagKey<Block> modBlockTag(String path) {
-		return net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, path));
+		return TagKey.create(Registries.BLOCK, new ResourceLocation(BlockBox.MOD_ID, path));
 	}
 
 	private static TagKey<Item> modItemTag(String path) {
-		return net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, path));
+		return TagKey.create(Registries.ITEM, new ResourceLocation(BlockBox.MOD_ID, path));
 	}
 }

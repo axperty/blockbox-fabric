@@ -26,7 +26,7 @@ public class ModItems
 
 	private static <T extends Item> Supplier<T> register(String name, Supplier<T> itemSupplier) {
 		T item = itemSupplier.get();
-		Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, name), item);
+		Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(BlockBox.MOD_ID, name), item);
 		return () -> item;
 	}
 	public static LinkedHashSet<Supplier<? extends Item>> CREATIVE_TAB_ITEMS = Sets.newLinkedHashSet();
@@ -97,23 +97,23 @@ public class ModItems
 	public static final Supplier<BlockItem> ROUGH_GLASS = registerSimpleBlockItem("rough_glass", ModBlocks.ROUGH_GLASS);
 	public static final Supplier<BlockItem> ROUGH_GLASS_PANE = registerSimpleBlockItem("rough_glass_pane", ModBlocks.ROUGH_GLASS_PANE);
 
-	public static final Supplier<BlockItem> COPPER_BARS = registerSimpleBlockItem("copper_bars", ModBlocks.COPPER_BARS, Items.COPPER_TRAPDOOR);
-	public static final Supplier<BlockItem> EXPOSED_COPPER_BARS = registerSimpleBlockItem("exposed_copper_bars", ModBlocks.EXPOSED_COPPER_BARS, Items.EXPOSED_COPPER_TRAPDOOR);
-	public static final Supplier<BlockItem> WEATHERED_COPPER_BARS = registerSimpleBlockItem("weathered_copper_bars", ModBlocks.WEATHERED_COPPER_BARS, Items.WEATHERED_COPPER_TRAPDOOR);
-	public static final Supplier<BlockItem> OXIDIZED_COPPER_BARS = registerSimpleBlockItem("oxidized_copper_bars", ModBlocks.OXIDIZED_COPPER_BARS, Items.OXIDIZED_COPPER_TRAPDOOR);
-	public static final Supplier<BlockItem> WAXED_COPPER_BARS = registerSimpleBlockItem("waxed_copper_bars", ModBlocks.WAXED_COPPER_BARS, Items.WAXED_COPPER_TRAPDOOR);
-	public static final Supplier<BlockItem> WAXED_EXPOSED_COPPER_BARS = registerSimpleBlockItem("waxed_exposed_copper_bars", ModBlocks.WAXED_EXPOSED_COPPER_BARS, Items.WAXED_EXPOSED_COPPER_TRAPDOOR);
-	public static final Supplier<BlockItem> WAXED_WEATHERED_COPPER_BARS = registerSimpleBlockItem("waxed_weathered_copper_bars", ModBlocks.WAXED_WEATHERED_COPPER_BARS, Items.WAXED_WEATHERED_COPPER_TRAPDOOR);
-	public static final Supplier<BlockItem> WAXED_OXIDIZED_COPPER_BARS = registerSimpleBlockItem("waxed_oxidized_copper_bars", ModBlocks.WAXED_OXIDIZED_COPPER_BARS, Items.WAXED_OXIDIZED_COPPER_TRAPDOOR);
+	public static final Supplier<BlockItem> COPPER_BARS = registerSimpleBlockItem("copper_bars", ModBlocks.COPPER_BARS, Items.COPPER_BLOCK);
+	public static final Supplier<BlockItem> EXPOSED_COPPER_BARS = registerSimpleBlockItem("exposed_copper_bars", ModBlocks.EXPOSED_COPPER_BARS, Items.EXPOSED_COPPER);
+	public static final Supplier<BlockItem> WEATHERED_COPPER_BARS = registerSimpleBlockItem("weathered_copper_bars", ModBlocks.WEATHERED_COPPER_BARS, Items.WEATHERED_COPPER);
+	public static final Supplier<BlockItem> OXIDIZED_COPPER_BARS = registerSimpleBlockItem("oxidized_copper_bars", ModBlocks.OXIDIZED_COPPER_BARS, Items.OXIDIZED_COPPER);
+	public static final Supplier<BlockItem> WAXED_COPPER_BARS = registerSimpleBlockItem("waxed_copper_bars", ModBlocks.WAXED_COPPER_BARS, Items.COPPER_BLOCK);
+	public static final Supplier<BlockItem> WAXED_EXPOSED_COPPER_BARS = registerSimpleBlockItem("waxed_exposed_copper_bars", ModBlocks.WAXED_EXPOSED_COPPER_BARS, Items.WAXED_EXPOSED_COPPER);
+	public static final Supplier<BlockItem> WAXED_WEATHERED_COPPER_BARS = registerSimpleBlockItem("waxed_weathered_copper_bars", ModBlocks.WAXED_WEATHERED_COPPER_BARS, Items.WAXED_WEATHERED_COPPER);
+	public static final Supplier<BlockItem> WAXED_OXIDIZED_COPPER_BARS = registerSimpleBlockItem("waxed_oxidized_copper_bars", ModBlocks.WAXED_OXIDIZED_COPPER_BARS, Items.WAXED_OXIDIZED_COPPER);
 
-	public static final Supplier<BlockItem> COPPER_PILLAR = registerSimpleBlockItem("copper_pillar", ModBlocks.COPPER_PILLAR, Items.COPPER_GRATE);
-	public static final Supplier<BlockItem> EXPOSED_COPPER_PILLAR = registerSimpleBlockItem("exposed_copper_pillar", ModBlocks.EXPOSED_COPPER_PILLAR, Items.EXPOSED_COPPER_GRATE);
-	public static final Supplier<BlockItem> WEATHERED_COPPER_PILLAR = registerSimpleBlockItem("weathered_copper_pillar", ModBlocks.WEATHERED_COPPER_PILLAR, Items.WEATHERED_COPPER_GRATE);
-	public static final Supplier<BlockItem> OXIDIZED_COPPER_PILLAR = registerSimpleBlockItem("oxidized_copper_pillar", ModBlocks.OXIDIZED_COPPER_PILLAR, Items.OXIDIZED_COPPER_GRATE);
-	public static final Supplier<BlockItem> WAXED_COPPER_PILLAR = registerSimpleBlockItem("waxed_copper_pillar", ModBlocks.WAXED_COPPER_PILLAR, Items.WAXED_COPPER_GRATE);
-	public static final Supplier<BlockItem> WAXED_EXPOSED_COPPER_PILLAR = registerSimpleBlockItem("waxed_exposed_copper_pillar", ModBlocks.WAXED_EXPOSED_COPPER_PILLAR, Items.WAXED_EXPOSED_COPPER_GRATE);
-	public static final Supplier<BlockItem> WAXED_WEATHERED_COPPER_PILLAR = registerSimpleBlockItem("waxed_weathered_copper_pillar", ModBlocks.WAXED_WEATHERED_COPPER_PILLAR, Items.WAXED_WEATHERED_COPPER_GRATE);
-	public static final Supplier<BlockItem> WAXED_OXIDIZED_COPPER_PILLAR = registerSimpleBlockItem("waxed_oxidized_copper_pillar", ModBlocks.WAXED_OXIDIZED_COPPER_PILLAR, Items.WAXED_OXIDIZED_COPPER_GRATE);
+	public static final Supplier<BlockItem> COPPER_PILLAR = registerSimpleBlockItem("copper_pillar", ModBlocks.COPPER_PILLAR, Items.COPPER_BLOCK);
+	public static final Supplier<BlockItem> EXPOSED_COPPER_PILLAR = registerSimpleBlockItem("exposed_copper_pillar", ModBlocks.EXPOSED_COPPER_PILLAR, Items.EXPOSED_COPPER);
+	public static final Supplier<BlockItem> WEATHERED_COPPER_PILLAR = registerSimpleBlockItem("weathered_copper_pillar", ModBlocks.WEATHERED_COPPER_PILLAR, Items.WEATHERED_COPPER);
+	public static final Supplier<BlockItem> OXIDIZED_COPPER_PILLAR = registerSimpleBlockItem("oxidized_copper_pillar", ModBlocks.OXIDIZED_COPPER_PILLAR, Items.OXIDIZED_COPPER);
+	public static final Supplier<BlockItem> WAXED_COPPER_PILLAR = registerSimpleBlockItem("waxed_copper_pillar", ModBlocks.WAXED_COPPER_PILLAR, Items.WAXED_COPPER_BLOCK);
+	public static final Supplier<BlockItem> WAXED_EXPOSED_COPPER_PILLAR = registerSimpleBlockItem("waxed_exposed_copper_pillar", ModBlocks.WAXED_EXPOSED_COPPER_PILLAR, Items.WAXED_EXPOSED_COPPER);
+	public static final Supplier<BlockItem> WAXED_WEATHERED_COPPER_PILLAR = registerSimpleBlockItem("waxed_weathered_copper_pillar", ModBlocks.WAXED_WEATHERED_COPPER_PILLAR, Items.WAXED_WEATHERED_COPPER);
+	public static final Supplier<BlockItem> WAXED_OXIDIZED_COPPER_PILLAR = registerSimpleBlockItem("waxed_oxidized_copper_pillar", ModBlocks.WAXED_OXIDIZED_COPPER_PILLAR, Items.WAXED_OXIDIZED_COPPER);
 
 	public static final Supplier<BlockItem> IRON_PLATE = registerSimpleBlockItem("iron_plate", ModBlocks.IRON_PLATE, Items.HEAVY_WEIGHTED_PRESSURE_PLATE);
 	public static final Supplier<BlockItem> IRON_TREAD_PLATE = registerSimpleBlockItem("iron_tread_plate", ModBlocks.IRON_TREAD_PLATE, Items.HEAVY_WEIGHTED_PRESSURE_PLATE);

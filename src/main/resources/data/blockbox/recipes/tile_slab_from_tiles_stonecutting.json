@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "blockbox:tiles"
+  },
+  "result": "blockbox:tile_slab",
+  "count": 2
+}

@@ -16,7 +16,7 @@ public class ModEntityTypes
 
 	private static <T extends EntityType<?>> Supplier<T> register(String name, Supplier<T> entityTypeSupplier) {
 		T entityType = entityTypeSupplier.get();
-		Registry.register(BuiltInRegistries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, name), entityType);
+		Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(BlockBox.MOD_ID, name), entityType);
 		return () -> entityType;
 	}
 
@@ -25,5 +25,6 @@ public class ModEntityTypes
 					.sized(0.25f, 0.35f)
 					.clientTrackingRange(3)
 					.updateInterval(Integer.MAX_VALUE)
+					.noSave()
 					.build("seat"));
 }

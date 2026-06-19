@@ -1,9 +1,8 @@
 package com.axperty.blockbox.common.block;
 
-import com.mojang.serialization.MapCodec;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -19,17 +18,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
 import com.axperty.blockbox.common.entity.SeatEntity;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class SeatBlock extends HorizontalDirectionalBlock
 {
-	public static final MapCodec<SeatBlock> CODEC = simpleCodec(SeatBlock::new);
-
+	
 	private static final VoxelShape SHAPE = Shapes.or(
 			Block.box(0.0, 4.0, 0.0, 16.0, 8.0, 16.0),
 			Block.box(0.0, 0.0, 0.0, 3.0, 4.0, 3.0),
@@ -44,7 +38,7 @@ public class SeatBlock extends HorizontalDirectionalBlock
 	}
 
 	@Override
-	public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
 		if (player.isShiftKeyDown())
 			return InteractionResult.PASS;
 		if (level.isClientSide)
@@ -70,7 +64,7 @@ public class SeatBlock extends HorizontalDirectionalBlock
 	}
 
 	@Override
-	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return SHAPE;
 	}
 
@@ -79,8 +73,4 @@ public class SeatBlock extends HorizontalDirectionalBlock
 		builder.add(FACING);
 	}
 
-	@Override
-	protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
-		return CODEC;
 	}
-}

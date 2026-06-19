@@ -21,6 +21,6 @@ public class BlockBox implements ModInitializer
 		ModParticleTypes.register();
 		ModCreativeTabs.register();
 		CommonEvents.registerTabModifications();
-		LOGGER.info("The Block Box (Fabric) loaded");
+		LOGGER.info("The Block Box Refabricated loaded");
 	}
 }

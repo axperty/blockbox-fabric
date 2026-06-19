@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,9 +19,9 @@ public class SkyLanternBlock extends Block
 	}
 
 	@Override
-	protected void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
+	public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
 		BlockPos blockpos = hit.getBlockPos();
-		if (!level.isClientSide && projectile.mayInteract(level, blockpos) && projectile.mayBreak(level)) {
+		if (!level.isClientSide && projectile.mayInteract(level, blockpos) && level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
 			level.destroyBlock(blockpos, true, projectile);
 		}
 	}

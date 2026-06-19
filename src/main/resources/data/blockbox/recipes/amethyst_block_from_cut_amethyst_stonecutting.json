@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "blockbox:cut_amethyst"
+  },
+  "result": "minecraft:amethyst_block",
+  "count": 1
+}

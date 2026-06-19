@@ -10,9 +10,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -33,16 +33,16 @@ public class SkyLanternItem extends BlockItem
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag isAdvanced) {
+	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
 		MutableComponent textEmpty = Component.translatable(BlockBox.MOD_ID + ".tooltip.sky_lantern");
 		tooltip.add(textEmpty.withStyle(ChatFormatting.GRAY));
 	}
 
 	public static BlockHitResult getPlayerAimHitResult(Level level, Player player, ClipContext.Fluid fluidMode) {
-		double blockReach = player.blockInteractionRange();
+		double blockReach = 5.0;
 
 		Vec3 vec3 = player.getEyePosition();
-		Vec3 vec31 = vec3.add(player.calculateViewVector(player.getXRot(), player.getYRot()).scale(player.isSecondaryUseActive() ? blockReach / 2 : blockReach));
+		Vec3 vec31 = vec3.add(player.getViewVector(1.0F).scale(player.isSecondaryUseActive() ? blockReach / 2 : blockReach));
 		return level.clip(new ClipContext(vec3, vec31, ClipContext.Block.OUTLINE, fluidMode, player));
 	}
 }

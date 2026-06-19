@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "blockbox:lapis_lazuli_mosaic"
+  },
+  "result": "blockbox:lapis_lazuli_mosaic_slab",
+  "count": 2
+}

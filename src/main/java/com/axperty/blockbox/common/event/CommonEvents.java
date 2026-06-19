@@ -15,7 +15,7 @@ public class CommonEvents
 		}
 
 		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries -> {
-			VanillaTabOrdering.BUILDING_BLOCKS.reversed().forEach((item, startingPoint) -> {
+			VanillaTabOrdering.BUILDING_BLOCKS.forEach((item, startingPoint) -> {
 				entries.addAfter(startingPoint, new ItemStack(item.get()));
 			});
 		});

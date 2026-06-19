@@ -15,7 +15,7 @@ public class ModCreativeTabs
 
 	private static Supplier<CreativeModeTab> register(String name, Supplier<CreativeModeTab> tabSupplier) {
 		CreativeModeTab tab = tabSupplier.get();
-		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath(BlockBox.MOD_ID, name), tab);
+		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, new ResourceLocation(BlockBox.MOD_ID, name), tab);
 		return () -> tab;
 	}
 

@@ -1,6 +1,5 @@
 package com.axperty.blockbox.common.block;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -8,7 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -41,11 +40,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import com.axperty.blockbox.common.tag.ModTags;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 {
 	public static final BooleanProperty HANGING = BlockStateProperties.HANGING;
@@ -72,16 +67,17 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+		ItemStack stack = player.getItemInHand(hand);
 		if (stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof FireChargeItem) {
 			if (canLight(state)) {
 				level.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
 				level.setBlock(pos, state.setValue(BlockStateProperties.LIT, true), 11);
 				level.gameEvent(player, GameEvent.BLOCK_PLACE, pos);
 				if (player != null) {
-					stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+					stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
 				}
-				return ItemInteractionResult.sidedSuccess(level.isClientSide);
+				return InteractionResult.sidedSuccess(level.isClientSide);
 			}
 		}
 		if (stack.getItem() instanceof ShovelItem) {
@@ -89,18 +85,18 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 				level.playSound(null, pos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 1.0F, 1.0F);
 				level.setBlock(pos, state.setValue(BlockStateProperties.LIT, false), 11);
 				if (player != null) {
-					stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+					stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
 				}
-				return ItemInteractionResult.sidedSuccess(level.isClientSide);
+				return InteractionResult.sidedSuccess(level.isClientSide);
 			}
 		}
-		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+		return super.use(state, level, pos, player, hand, hitResult);
 	}
 
 	@Override
-	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
 		if (state.getValue(LIT) && entity instanceof LivingEntity && isEntityTouchingFlame(entity, pos, state)) {
-			entity.hurt(level.damageSources().campfire(), (float)this.fireDamage);
+			entity.hurt(level.damageSources().inFire(), (float)this.fireDamage);
 		}
 
 		super.entityInside(state, level, pos, entity);
@@ -113,7 +109,6 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 		return Shapes.joinIsNotEmpty(collisionShape, Shapes.create(entity.getBoundingBox()), BooleanOp.AND);
 	}
 
-	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
@@ -131,7 +126,7 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 	}
 
 	@Override
-	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
 		if (state.getValue(WATERLOGGED)) {
 			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
 		}
@@ -142,7 +137,7 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 	}
 
 	@Override
-	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return state.getValue(HANGING) ? SHAPE_HANGING : SHAPE_STANDING;
 	}
 
@@ -191,7 +186,7 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 		}
 	}
 
-	public static void douse(@Nullable Entity entity, LevelAccessor level, BlockPos pos, BlockState state) {
+	public static void douse(Entity entity, LevelAccessor level, BlockPos pos, BlockState state) {
 		if (level.isClientSide()) {
 			for (int i = 0; i < 20; i++) {
 				makeParticles((Level) level, pos);
@@ -235,7 +230,7 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 	}
 
 	@Override
-	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 		Direction direction = getConnectedDirection(state).getOpposite();
 		return Block.canSupportCenter(level, pos.relative(direction), direction.getOpposite());
 	}
@@ -245,11 +240,10 @@ public class BrazierBlock extends Block implements SimpleWaterloggedBlock
 	}
 
 	@Override
-	protected FluidState getFluidState(BlockState state) {
+	public FluidState getFluidState(BlockState state) {
 		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 
-	@Override
 	protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
 		return false;
 	}

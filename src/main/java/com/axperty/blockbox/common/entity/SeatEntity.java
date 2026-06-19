@@ -1,12 +1,10 @@
 package com.axperty.blockbox.common.entity;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -17,10 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import com.axperty.blockbox.common.block.SeatBlock;
 import com.axperty.blockbox.common.registry.ModEntityTypes;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class SeatEntity extends Entity
 {
 	public SeatEntity(EntityType<?> entityType, Level level) {
@@ -42,7 +37,6 @@ public class SeatEntity extends Entity
 		this.discard();
 	}
 
-	@Override
 	protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dimensions, float partialTick) {
 		return new Vec3(0, 0.55, 0);
 	}
@@ -57,7 +51,6 @@ public class SeatEntity extends Entity
 		return true;
 	}
 
-    @Override
     public void onPassengerTurned(final Entity entity) {
         entity.setYHeadRot(entity.getYRot());
     }
@@ -80,7 +73,7 @@ public class SeatEntity extends Entity
 	}
 
 	@Override
-	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+	protected void defineSynchedData() {
 
 	}
 

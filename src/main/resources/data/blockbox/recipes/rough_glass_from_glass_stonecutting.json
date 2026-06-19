@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minecraft:glass"
+  },
+  "result": "blockbox:rough_glass",
+  "count": 1
+}
