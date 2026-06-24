@@ -1,5 +1,6 @@
 package com.axperty.blockbox.common.registry;
 
+import com.axperty.blockbox.common.block.WeatheringCopperBarsBlock;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -121,23 +122,23 @@ public class ModBlocks
 	public static final Supplier<Block> ROUGH_GLASS = register("rough_glass", () -> new TransparentBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS))));
 	public static final Supplier<Block> ROUGH_GLASS_PANE = register("rough_glass_pane", () -> new IronBarsBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS_PANE))));
 
-	public static final Supplier<Block> COPPER_BARS = register("copper_bars", () -> new com.axperty.blockbox.common.block.WeatheringCopperBarsBlock(WeatheringCopper.WeatherState.UNAFFECTED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE))));
-	public static final Supplier<Block> EXPOSED_COPPER_BARS = register("exposed_copper_bars", () -> new com.axperty.blockbox.common.block.WeatheringCopperBarsBlock(WeatheringCopper.WeatherState.EXPOSED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.EXPOSED_COPPER_GRATE))));
-	public static final Supplier<Block> WEATHERED_COPPER_BARS = register("weathered_copper_bars", () -> new com.axperty.blockbox.common.block.WeatheringCopperBarsBlock(WeatheringCopper.WeatherState.WEATHERED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.WEATHERED_COPPER_GRATE))));
-	public static final Supplier<Block> OXIDIZED_COPPER_BARS = register("oxidized_copper_bars", () -> new com.axperty.blockbox.common.block.WeatheringCopperBarsBlock(WeatheringCopper.WeatherState.OXIDIZED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.OXIDIZED_COPPER_GRATE))));
-	public static final Supplier<Block> WAXED_COPPER_BARS = register("waxed_copper_bars", () -> new IronBarsBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE))));
-	public static final Supplier<Block> WAXED_EXPOSED_COPPER_BARS = register("waxed_exposed_copper_bars", () -> new IronBarsBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.EXPOSED_COPPER_GRATE))));
-	public static final Supplier<Block> WAXED_WEATHERED_COPPER_BARS = register("waxed_weathered_copper_bars", () -> new IronBarsBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.WEATHERED_COPPER_GRATE))));
-	public static final Supplier<Block> WAXED_OXIDIZED_COPPER_BARS = register("waxed_oxidized_copper_bars", () -> new IronBarsBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.OXIDIZED_COPPER_GRATE))));
+	public static final Supplier<Block> COPPER_BARS = register("copper_bars", () -> new WeatheringCopperBarsBlock(WeatheringCopper.WeatherState.UNAFFECTED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE.weathering().unaffected()))));
+	public static final Supplier<Block> EXPOSED_COPPER_BARS = register("exposed_copper_bars", () -> new WeatheringCopperBarsBlock(WeatheringCopper.WeatherState.EXPOSED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE.weathering().exposed()))));
+	public static final Supplier<Block> WEATHERED_COPPER_BARS = register("weathered_copper_bars", () -> new WeatheringCopperBarsBlock(WeatheringCopper.WeatherState.WEATHERED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE.weathering().weathered()))));
+	public static final Supplier<Block> OXIDIZED_COPPER_BARS = register("oxidized_copper_bars", () -> new WeatheringCopperBarsBlock(WeatheringCopper.WeatherState.OXIDIZED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE.weathering().oxidized()))));
+	public static final Supplier<Block> WAXED_COPPER_BARS = register("waxed_copper_bars", () -> new IronBarsBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE.weathering().unaffected()))));
+	public static final Supplier<Block> WAXED_EXPOSED_COPPER_BARS = register("waxed_exposed_copper_bars", () -> new IronBarsBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE.weathering().exposed()))));
+	public static final Supplier<Block> WAXED_WEATHERED_COPPER_BARS = register("waxed_weathered_copper_bars", () -> new IronBarsBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE.weathering().weathered()))));
+	public static final Supplier<Block> WAXED_OXIDIZED_COPPER_BARS = register("waxed_oxidized_copper_bars", () -> new IronBarsBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE.weathering().oxidized()))));
 
-	public static final Supplier<Block> COPPER_PILLAR = register("copper_pillar", () -> new WeatheringCopperPillarBlock(WeatheringCopper.WeatherState.UNAFFECTED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))));
-	public static final Supplier<Block> EXPOSED_COPPER_PILLAR = register("exposed_copper_pillar", () -> new WeatheringCopperPillarBlock(WeatheringCopper.WeatherState.EXPOSED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.EXPOSED_COPPER))));
-	public static final Supplier<Block> WEATHERED_COPPER_PILLAR = register("weathered_copper_pillar", () -> new WeatheringCopperPillarBlock(WeatheringCopper.WeatherState.WEATHERED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.WEATHERED_COPPER))));
-	public static final Supplier<Block> OXIDIZED_COPPER_PILLAR = register("oxidized_copper_pillar", () -> new WeatheringCopperPillarBlock(WeatheringCopper.WeatherState.OXIDIZED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.OXIDIZED_COPPER))));
-	public static final Supplier<Block> WAXED_COPPER_PILLAR = register("waxed_copper_pillar", () -> new RotatedPillarBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))));
-	public static final Supplier<Block> WAXED_EXPOSED_COPPER_PILLAR = register("waxed_exposed_copper_pillar", () -> new RotatedPillarBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.EXPOSED_COPPER))));
-	public static final Supplier<Block> WAXED_WEATHERED_COPPER_PILLAR = register("waxed_weathered_copper_pillar", () -> new RotatedPillarBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.WEATHERED_COPPER))));
-	public static final Supplier<Block> WAXED_OXIDIZED_COPPER_PILLAR = register("waxed_oxidized_copper_pillar", () -> new RotatedPillarBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.OXIDIZED_COPPER))));
+	public static final Supplier<Block> COPPER_PILLAR = register("copper_pillar", () -> new WeatheringCopperPillarBlock(WeatheringCopper.WeatherState.UNAFFECTED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK.weathering().unaffected()))));
+	public static final Supplier<Block> EXPOSED_COPPER_PILLAR = register("exposed_copper_pillar", () -> new WeatheringCopperPillarBlock(WeatheringCopper.WeatherState.EXPOSED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK.weathering().exposed()))));
+	public static final Supplier<Block> WEATHERED_COPPER_PILLAR = register("weathered_copper_pillar", () -> new WeatheringCopperPillarBlock(WeatheringCopper.WeatherState.WEATHERED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK.weathering().weathered()))));
+	public static final Supplier<Block> OXIDIZED_COPPER_PILLAR = register("oxidized_copper_pillar", () -> new WeatheringCopperPillarBlock(WeatheringCopper.WeatherState.OXIDIZED, prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK.weathering().oxidized()))));
+	public static final Supplier<Block> WAXED_COPPER_PILLAR = register("waxed_copper_pillar", () -> new RotatedPillarBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK.weathering().unaffected()))));
+	public static final Supplier<Block> WAXED_EXPOSED_COPPER_PILLAR = register("waxed_exposed_copper_pillar", () -> new RotatedPillarBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK.weathering().exposed()))));
+	public static final Supplier<Block> WAXED_WEATHERED_COPPER_PILLAR = register("waxed_weathered_copper_pillar", () -> new RotatedPillarBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK.weathering().weathered()))));
+	public static final Supplier<Block> WAXED_OXIDIZED_COPPER_PILLAR = register("waxed_oxidized_copper_pillar", () -> new RotatedPillarBlock(prop(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK.weathering().oxidized()))));
 
 	public static final Supplier<Block> IRON_PLATE = registerSimpleBlock("iron_plate", prop(PROPERTIES_IRON_PLATE));
 	public static final Supplier<Block> IRON_TREAD_PLATE = registerSimpleBlock("iron_tread_plate", prop(PROPERTIES_IRON_PLATE));
