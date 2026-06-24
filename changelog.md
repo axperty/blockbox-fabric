@@ -4,7 +4,7 @@
 
 ### ✨ What's New:
 
-- Added support for Minecraft 1.20.
+- Added support for Minecraft 1.20+.
 
 ***
 
